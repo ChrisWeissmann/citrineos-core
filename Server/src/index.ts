@@ -17,8 +17,10 @@ import { TransactionsModule, TransactionsModuleApi } from '@citrineos/transactio
 import { CertificatesModule, CertificatesModuleApi } from '@citrineos/certificates';
 import { EVDriverModule, EVDriverModuleApi } from '@citrineos/evdriver';
 import { ReportingModule, ReportingModuleApi } from '@citrineos/reporting';
+import { RoamingOicpModule, RoamingOicpModuleApi } from '@citrineos/roamingoicp';
 import { SmartChargingModule, SmartChargingModuleApi } from '@citrineos/smartcharging';
 import { sequelize } from '@citrineos/data';
+
 
 class CitrineOSServer {
 
@@ -93,19 +95,22 @@ class CitrineOSServer {
         const monitoringModule = new MonitoringModule(this._config, this._cache, this._createSender(), this._createHandler(), this._logger);
         const reportingModule = new ReportingModule(this._config, this._cache, this._createSender(), this._createHandler(), this._logger);
         const transactionsModule = new TransactionsModule(this._config, this._cache, this._createSender(), this._createHandler(), this._logger);
+        const roamingOicpModule = new RoamingOicpModule(this._config, this._cache, this._createSender(), this._createHandler(), this._logger);
         this._modules = [
             configurationModule,
             evdriverModule,
             monitoringModule,
             reportingModule,
-            transactionsModule
-        ]
+            transactionsModule,
+            roamingOicpModule
+        ];
         this._apis = [
             new ConfigurationModuleApi(configurationModule, this._server, this._logger),
             new EVDriverModuleApi(evdriverModule, this._server, this._logger),
             new MonitoringModuleApi(monitoringModule, this._server, this._logger),
             new ReportingModuleApi(reportingModule, this._server, this._logger),
             new TransactionsModuleApi(transactionsModule, this._server, this._logger),
+            new RoamingOicpModuleApi(roamingOicpModule, this._server, this._logger),
         ];
         if (this._config.modules.certificates) {
            const certificatesModule = new CertificatesModule(this._config, this._cache, this._createSender(), this._createHandler(), this._logger)
