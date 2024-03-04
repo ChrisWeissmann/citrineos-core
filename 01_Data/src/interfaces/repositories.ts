@@ -3,12 +3,13 @@
 //
 // SPDX-License-Identifier: Apache 2.0
 
-import { SetVariableDataType, ICrudRepository, SetVariableResultType, AuthorizationData, TransactionEventRequest, ChargingStateEnumType, IdTokenType, VariableAttributeType, ReportDataType, BootConfig, RegistrationStatusEnumType, StatusInfoType, GetVariableResultType, EVSEType, SecurityEventNotificationRequest } from "@citrineos/base";
+import { SetVariableDataType, ICrudRepository, SetVariableResultType, AuthorizationData, TransactionEventRequest, ChargingStateEnumType, IdTokenType, VariableAttributeType, ReportDataType, BootConfig, RegistrationStatusEnumType, StatusInfoType, GetVariableResultType, EVSEType, SecurityEventNotificationRequest, ERoamingPushEvseDataOperatorEvseData } from "@citrineos/base";
 import { AuthorizationQuerystring } from "./queries/Authorization";
 import { Transaction } from "../layers/sequelize/model/TransactionEvent";
 import { VariableAttribute } from "../layers/sequelize/model/DeviceModel/VariableAttribute";
 import { AuthorizationRestrictions, VariableAttributeQuerystring } from ".";
 import { Boot, Authorization, SecurityEvent } from "../layers/sequelize";
+import { ERoamingEvseData } from "../layers/sequelize/model/ERoamingEvseData";
 
 
 export interface IAuthorizationRepository extends ICrudRepository<AuthorizationData> {
@@ -54,4 +55,8 @@ export interface ITransactionEventRepository extends ICrudRepository<Transaction
     readTransactionByStationIdAndTransactionId(stationId: string, transactionId: string): Promise<Transaction | undefined>;
     readAllTransactionsByStationIdAndEvseAndChargingStates(stationId: string, evse: EVSEType, chargingStates?: ChargingStateEnumType[]): Promise<Transaction[]>;
     readAllActiveTransactionByIdToken(idToken: IdTokenType): Promise<Transaction[]>;
+}
+
+export interface IERoamingPushEvseRepository extends ICrudRepository<ERoamingPushEvseDataOperatorEvseData> {
+    createOrUpdateERoamingPushEvseBySessionId(value: ERoamingPushEvseDataOperatorEvseData, sessionId: string): Promise<ERoamingEvseData>;
 }

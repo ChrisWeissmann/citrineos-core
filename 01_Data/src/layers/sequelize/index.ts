@@ -17,6 +17,7 @@ export { BootRepository } from "./repository/Boot";
 export { DeviceModelRepository } from "./repository/DeviceModel";
 export { TransactionEventRepository } from "./repository/TransactionEvent";
 export { SecurityEventRepository } from "./repository/SecurityEvent";
+export { ERoamingEvseDataRepository } from "./repository/ERoamingEvseData";
 
 // Sequelize Utilities
 export { DefaultSequelizeInstance } from "./util";

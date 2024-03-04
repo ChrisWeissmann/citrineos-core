@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: Apache 2.0
 
 import { AbstractModule, CallAction, SystemConfig, ICache, IMessageSender, IMessageHandler, EventGroup, AsHandler, IMessage, HandlerProperties, StatusNotificationRequest } from "@citrineos/base";
-// import { IAuthorizationRepository, ITransactionEventRepository, sequelize } from "@citrineos/data";
+import { IERoamingPushEvseRepository, sequelize } from "@citrineos/data";
 import { PubSubReceiver, PubSubSender, Timer } from "@citrineos/util";
 import deasyncPromise from "deasync-promise";
 import { ILogObj, Logger } from 'tslog';
@@ -19,6 +19,12 @@ export class RoamingOicpModule extends AbstractModule {
   ];
   protected _responses: CallAction[] = [
   ];
+
+  protected _eRoamingEvsePushDataRepository: IERoamingPushEvseRepository;
+
+  get eRoamingEvsePushDataRepository(): IERoamingPushEvseRepository {
+    return this._eRoamingEvsePushDataRepository;
+  }
 
   /**
    * This is the constructor function that initializes the {@link RoamingOicpModule}.
@@ -43,6 +49,7 @@ export class RoamingOicpModule extends AbstractModule {
     sender?: IMessageSender,
     handler?: IMessageHandler,
     logger?: Logger<ILogObj>,
+    eRoamingEvsePushDataRepository?: IERoamingPushEvseRepository,
   ) {
     super(config, cache, handler || new PubSubReceiver(config, logger), sender || new PubSubSender(config, logger), EventGroup.RoamingOicp, logger);
 
@@ -53,8 +60,7 @@ export class RoamingOicpModule extends AbstractModule {
       throw new Error("Could not initialize module due to failure in handler initialization.");
     }
 
-    // this._transactionEventRepository = transactionEventRepository || new sequelize.TransactionEventRepository(config, logger);
-    // this._authorizeRepository = authorizeRepository || new sequelize.AuthorizationRepository(config, logger);
+    this._eRoamingEvsePushDataRepository = eRoamingEvsePushDataRepository || new sequelize.ERoamingEvseDataRepository(config, logger);
 
     this._logger.info(`Initialized in ${timer.end()}ms...`);
   }
