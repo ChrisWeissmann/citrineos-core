@@ -106,7 +106,9 @@ export abstract class AbstractModule implements IModule {
         return baseLogger ? baseLogger.getSubLogger({ name: this.constructor.name }) : new Logger<ILogObj>({
             name: this.constructor.name,
             minLevel: this._config.logLevel,
-            hideLogPositionForProduction: this._config.env === "production"
+            hideLogPositionForProduction: this._config.env === "production",
+            //Disable colors for cloud deployment as some cloud logging environments such as cloudwatch can not interpret colors
+            stylePrettyLogs: process.env.DEPLOYMENT_TARGET != "cloud"
         });
     }
 
